@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import requests, time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
@@ -40,6 +39,7 @@ def get_homes_in_area(state,city):
     html = driver.find_element("tag name",'html')
     total_height = int(driver.execute_script("return document.body.scrollHeight"))
 
+    #Implement smooth scroll to account for dynamically loaded properties
     for i in range(1, total_height, 10):
         driver.execute_script(f"window.scrollTo(0, {i});")
     html_content = driver.page_source
@@ -72,8 +72,6 @@ def get_homes_in_area(state,city):
             finally:
                 if validProperty:
                     properties[link.div["title"]]=[link["href"],beds,baths,footage,price,images]
-
-        print(len(properties))
         #Stop if processed final page
         if i==(limit+1):
             break
@@ -92,7 +90,6 @@ def get_homes_in_area(state,city):
         f.write("Property\tLink\tPrice\tBeds\tBaths\tSquare Feet\tImage Links\n")
         for property in properties:
             f.write("\t".join([property]+properties[property])+"\n")
-
     return
 
 
@@ -101,7 +98,7 @@ if __name__ == "__main__":
         state=input("Enter an abbreviated state in the US (ex: Minnestoa -> MN): ")
         city=input("Enter a city in "+state+": ")
         get_homes_in_area(state,city)
-    #except Exception as e:
-    #    print(e,"An exception occurred")
+    except Exception as e:
+        print(e,"An exception occurred")
     finally:
         print("Done")
