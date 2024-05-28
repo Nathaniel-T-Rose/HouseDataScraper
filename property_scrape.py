@@ -1,3 +1,4 @@
+import os
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -6,10 +7,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
 
 
-PATH = "C:/chromedriver-win64/chromedriver.exe"
+#DRIVER_PATH = "C:/chromedriver-win64/chromedriver.exe"
+
+#get driver path from environment
+PATH = os.getenv("DRIVER_PATH")
 
 def get_homes_in_area(state,city):
+    
+    #Set base url
     url="https://www.trulia.com/"+state+"/"+city+"/APARTMENT,CONDO,COOP,MULTI-FAMILY,SINGLE-FAMILY_HOME,TOWNHOUSE_type/"
+    
+    #Selenium setup
     headers= {
          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
          "Accept-Language":"en-US,en;q=0.9",
